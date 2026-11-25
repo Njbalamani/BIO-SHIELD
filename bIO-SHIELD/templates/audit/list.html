@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Audit log · BioShield{% endblock %}
+{% block section_label %}Administration{% endblock %}
+{% block page_title %}<h1>Audit log</h1>{% endblock %}
+{% block content %}
+<section class="view-head">
+  <div>
+    <span class="eyebrow">Administration</span>
+    <h2>Activity history</h2>
+    <p class="muted">Recorded actions across the synthetic workspace, scoped to your organizations.</p>
+  </div>
+  <span class="badge badge--outline">{{ audit_logs|length|default:"0" }} entries</span>
+</section>
+<section class="card card--table">
+  <div class="table-scroll">
+    <table class="table table--compact" id="audit-log-table">
+      <thead>
+        <tr>
+          <th scope="col">Time</th>
+          <th scope="col">Actor</th>
+          <th scope="col">Action</th>
+          <th scope="col">Target</th>
+          <th scope="col">Organization</th>
+          <th scope="col">Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in audit_logs|default:object_list %}
+          <tr>
+            <td>{{ entry.created_at|default:"—" }}</td>
+            <td>{{ entry.user|default:"synthetic-user" }}</td>
+            <td><span class="badge badge--silver">{{ entry.action|default:"action" }}</span></td>
+            <td>{{ entry.target_type|default:"—" }} {{ entry.target_id|default:"" }}</td>
+            <td>{{ entry.organization|default:"—" }}</td>
+            <td><code>{{ entry.ip_address|default:"—" }}</code></td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6">
+            <div class="empty-state">
+              <span class="empty-icon" aria-hidden="true">⌁</span>
+              <h3>No audit entries yet</h3>
+              <p>Activity from synthetic workspace actions will appear here.</p>
+            </div>
+          </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

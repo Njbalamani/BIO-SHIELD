@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="BioShield mark">
+  <defs>
+    <linearGradient id="bs-shield" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3f6fb"/>
+      <stop offset="0.45" stop-color="#7f8da7"/>
+      <stop offset="1" stop-color="#1b2740"/>
+    </linearGradient>
+    <linearGradient id="bs-gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f9edc8"/>
+      <stop offset="0.5" stop-color="#dfbe6d"/>
+      <stop offset="1" stop-color="#b99344"/>
+    </linearGradient>
+    <radialGradient id="bs-glow" cx="0.5" cy="0.45" r="0.55">
+      <stop offset="0" stop-color="#62d8b4" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#62d8b4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="url(#bs-glow)"/>
+  <path d="M32 5 53 13v17c0 13-8.5 22.5-21 29C19.5 52.5 11 43 11 30V13L32 5Z" fill="url(#bs-shield)" stroke="url(#bs-gold)" stroke-width="2.2"/>
+  <path d="M32 11 47 16.5V30c0 9.5-6 17-15 22-9-5-15-12.5-15-22V16.5L32 11Z" fill="#0a1020" fill-opacity="0.55" stroke="#f9edc8" stroke-opacity="0.35" stroke-width="0.9"/>
+  <rect x="29.2" y="21" width="5.6" height="22" rx="2" fill="url(#bs-gold)"/>
+  <rect x="21" y="29.2" width="22" height="5.6" rx="2" fill="url(#bs-gold)"/>
+  <circle cx="32" cy="32" r="3.2" fill="#070b16" stroke="#f9edc8" stroke-width="1.1"/>
+</svg>

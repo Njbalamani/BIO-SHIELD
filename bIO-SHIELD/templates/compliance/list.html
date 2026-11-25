@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Compliance · BioShield{% endblock %}
+{% block section_label %}Workspace{% endblock %}
+{% block page_title %}<h1>Compliance</h1>{% endblock %}
+{% block content %}
+<section class="view-head">
+  <div>
+    <span class="eyebrow">Workspace</span>
+    <h2>Control checklist workspace</h2>
+    <p class="muted">Map synthetic evidence to internal control objectives and reporting frameworks.</p>
+  </div>
+  <span class="badge badge--gold badge--outline">Decision support only</span>
+</section>
+<div class="notice" role="note">
+  <span class="notice__mark" aria-hidden="true">!</span>
+  <div><strong>This checklist is not a legal certification.</strong> Automated results support internal review only and do not establish compliance with any law or standard.</div>
+</div>
+<section class="grid grid--3">
+  {% for framework in frameworks|default:object_list %}
+    <article class="card card--framework">
+      <header class="card__header">
+        <span class="eyebrow">{{ framework.code|default:framework.slug|default:"framework" }}</span>
+        <span class="badge badge--silver">{{ framework.status|default:"in progress" }}</span>
+      </header>
+      <h3>{{ framework.name|default:framework.title|default:"Internal control set" }}</h3>
+      <p class="muted">{{ framework.description|default:"Synthetic mapping of controls to placeholder evidence." }}</p>
+      <div class="score-row"><span class="score-value">{{ framework.score|default:framework.progress|default:0 }}%</span><span class="muted">controls evidenced</span></div>
+      <div class="progress" role="img" aria-label="Control coverage"><span class="progress__fill" style="width: {{ framework.score|default:framework.progress|default:0 }}%"></span></div>
+      <ul class="check-list check-list--compact">
+        <li>Data inventory recorded</li>
+        <li>Masking rules documented</li>
+        <li>Reviewer decisions logged</li>
+      </ul>
+      <a class="link-arrow" href="{{ framework.get_absolute_url|default:'#' }}">Open checklist <span aria-hidden="true">→</span></a>
+    </article>
+  {% empty %}
+    <div class="card card--empty card--empty-wide">
+      <span class="empty-icon" aria-hidden="true">✓</span>
+      <h3>No checklists loaded</h3>
+      <p>Framework mappings appear here when evidence sets are added to the synthetic workspace.</p>
+    </div>
+  {% endfor %}
+</section>
+<section class="section section--tight">
+  <div class="card card--glass">
+    <span class="eyebrow">Interpretation</span>
+    <h3>How to read these results</h3>
+    <p class="muted">A completed control item means supporting evidence exists in the sandbox. It does not mean an auditor, regulator or court has validated the control. Human review and professional advice remain required.</p>
+  </div>
+</section>
+{% endblock %}

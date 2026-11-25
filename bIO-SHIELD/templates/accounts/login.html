@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Sign in · BioShield{% endblock %}
+{% block section_label %}Account{% endblock %}
+{% block page_title %}<h1>Welcome back</h1>{% endblock %}
+{% block content %}
+<div class="auth-layout">
+  <section class="card card--auth">
+    <span class="eyebrow">Secure access</span>
+    <h2>Sign in to your workspace</h2>
+    <p class="muted">Use a synthetic demo account. No production records are available in this environment.</p>
+    <form method="post" action="" class="form form--stack" data-enhance>
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <div class="form__field">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.help_text %}<small class="form__help">{{ field.help_text }}</small>{% endif %}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+      <div class="form__actions">
+        <button class="button button--gold" type="submit" data-submit-label="Signing in…">Sign in</button>
+        <a class="button button--ghost" href="{% url 'accounts:register' %}">Create account</a>
+      </div>
+    </form>
+  </section>
+  <aside class="auth-aside">
+    <div class="card card--glass">
+      <span class="feature-icon" aria-hidden="true">⌁</span>
+      <h3>Audit-ready by design</h3>
+      <p>Sign-in events, document access and reviewer decisions are recorded with request identifiers for traceability.</p>
+      <ul class="check-list">
+        <li>Role-aware navigation</li>
+        <li>Session hardening headers</li>
+        <li>Explicit synthetic-data banner</li>
+      </ul>
+    </div>
+    <div class="card card--glass">
+      <span class="eyebrow">Demo notice</span>
+      <p class="muted">All names, identifiers, dates and domains in this project are fabricated and use <code>.invalid</code> addresses.</p>
+    </div>
+  </aside>
+</div>
+{% endblock %}

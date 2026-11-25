@@ -1,0 +1,25 @@
+SYNTHETIC PATIENT SUMMARY - FABRICATED DEMONSTRATION RECORD
+This document is entirely fake. It contains no real patient information.
+
+Patient name: Avery Placeholder
+Record alias: Sample Only
+MRN: SYN-MRN-000001
+Email: avery.placeholder@example.invalid
+Phone: 555-010-0001
+Date of birth: 2026-01-04
+Encounter date: 2026-02-11
+Organization: Northwind Example Clinic
+Clinician: Dr. Jordan Fictitious
+Department: Imaginary Internal Medicine
+
+Reason for visit:
+Synthetic follow-up for demonstration condition alpha. Values and narrative below were invented for privacy-tool testing.
+
+Assessment:
+Placeholder diagnosis alpha remains stable in this fabricated scenario. No clinical conclusions should be drawn from this text.
+
+Medication list:
+Placeholder tablet 10 mg, invented dose, fake schedule.
+
+Review note:
+Analyst Taylor Example reviewed this synthetic summary on 2026-02-12. Contact: taylor.example@example.invalid.

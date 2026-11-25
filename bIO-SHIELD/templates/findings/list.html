@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Findings · BioShield{% endblock %}
+{% block section_label %}Workspace{% endblock %}
+{% block page_title %}<h1>Findings</h1>{% endblock %}
+{% block content %}
+<section class="view-head">
+  <div>
+    <span class="eyebrow">Workspace</span>
+    <h2>Candidate entity register</h2>
+    <p class="muted">Every proposed mask remains visible until a reviewer confirms or rejects it.</p>
+  </div>
+  <span class="badge badge--gold badge--outline">{{ findings|length|default:"0" }} in queue</span>
+</section>
+<section class="filter-bar">
+  <label class="search-field">
+    <span aria-hidden="true">⌕</span>
+    <input type="search" data-table-filter="#findings-table" placeholder="Filter findings" aria-label="Filter findings">
+  </label>
+  <div class="chip-row" role="group" aria-label="Severity filter">
+    <button class="chip chip--active" type="button" data-severity-filter="all">All</button>
+    <button class="chip" type="button" data-severity-filter="high">High</button>
+    <button class="chip" type="button" data-severity-filter="medium">Medium</button>
+    <button class="chip" type="button" data-severity-filter="low">Low</button>
+  </div>
+</section>
+<section class="card card--table">
+  <div class="table-scroll">
+    <table class="table table--compact" id="findings-table">
+      <thead>
+        <tr>
+          <th scope="col">Entity</th>
+          <th scope="col">Masked value</th>
+          <th scope="col">Document</th>
+          <th scope="col">Confidence</th>
+          <th scope="col">Severity</th>
+          <th scope="col">Review</th>
+          <th scope="col" class="u-right">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for finding in findings|default:object_list %}
+          <tr data-search-row="{{ finding.finding_type|default:'' }} {{ finding.document|default:'' }} {{ finding.severity|default:'' }}" data-severity="{{ finding.severity|default:'low' }}">
+            <td><span class="badge badge--silver">{{ finding.finding_type|default:"entity" }}</span></td>
+            <td><code class="masked-value">{{ finding.value_masked|default:"[REDACTED]" }}</code></td>
+            <td>{{ finding.document|default:"—" }}</td>
+            <td><span class="badge badge--silver" data-confidence="{{ finding.confidence|default:0 }}">{{ finding.confidence|default:"—" }}</span></td>
+            <td><span class="badge badge--gold">{{ finding.severity|default:"low" }}</span></td>
+            <td>
+              <span class="badge badge--mint">{{ finding.status|default:"pending" }}</span>
+              {% if finding.reviewed_by %}<span class="table__secondary">by {{ finding.reviewed_by }}</span>{% endif %}
+            </td>
+            <td class="u-right">
+              {% if can_review_findings %}
+                <form class="review-form" method="post" action="{% url 'findings:review' finding.pk %}">
+                  {% csrf_token %}
+                  <select id="review-{{ finding.pk }}" name="status" aria-label="Decision for {{ finding.finding_type }} finding">
+                    <option value="REVIEWED">Confirm</option>
+                    <option value="REMEDIATED">Remediated</option>
+                    <option value="FALSE_POSITIVE">False positive</option>
+                  </select>
+                  <button class="button button--ghost button--tiny" type="submit">Record</button>
+                </form>
+              {% else %}
+                <span class="badge badge--outline">Read only</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="7">
+            <div class="empty-state">
+              <span class="empty-icon" aria-hidden="true">◇</span>
+              <h3>No findings in the queue</h3>
+              <p>Scan a synthetic document to generate candidate masks with confidence scores.</p>
+              <a class="button button--gold button--small" href="{% url 'documents:upload' %}">Upload a sample</a>
+            </div>
+          </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Create account · BioShield{% endblock %}
+{% block section_label %}Account{% endblock %}
+{% block page_title %}<h1>Create your workspace</h1>{% endblock %}
+{% block content %}
+<div class="auth-layout">
+  <section class="card card--auth">
+    <span class="eyebrow">New analyst</span>
+    <h2>Register for the sandbox</h2>
+    <p class="muted">Accounts are for demonstration only. Do not enter real clinical information.</p>
+    <form method="post" action="" class="form form--stack" data-enhance>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <div class="form__field">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.help_text %}<small class="form__help">{{ field.help_text }}</small>{% endif %}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+      <label class="check-row">
+        <input type="checkbox" required>
+        <span>I understand this environment contains synthetic data only and is not a certification tool.</span>
+      </label>
+      <div class="form__actions">
+        <button class="button button--gold" type="submit" data-submit-label="Creating…">Create account</button>
+        <a class="button button--ghost" href="{% url 'accounts:login' %}">Back to sign in</a>
+      </div>
+    </form>
+  </section>
+  <aside class="auth-aside">
+    <div class="card card--glass">
+      <span class="feature-icon" aria-hidden="true">✧</span>
+      <h3>What you can do</h3>
+      <ul class="check-list">
+        <li>Upload synthetic documents</li>
+        <li>Inspect masked findings</li>
+        <li>Compare risk scores</li>
+        <li>Generate sample reports</li>
+      </ul>
+    </div>
+    <div class="card card--glass">
+      <span class="eyebrow">Responsible use</span>
+      <p class="muted">Automated control checklists support internal review. They do not constitute legal or regulatory certification.</p>
+      <a class="link-arrow" href="{% url 'compliance:list' %}">Compliance overview <span aria-hidden="true">→</span></a>
+    </div>
+  </aside>
+</div>
+{% endblock %}

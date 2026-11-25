@@ -1,0 +1,11 @@
+event_id,actor_id,actor_name,actor_email,event_type,document_id,organization_id,timestamp,ip_address,user_agent,result,risk_signal
+EVT-SYN-0001,USR-SYN-001,Avery Placeholder,avery.placeholder@example.invalid,view,DOC-SYN-0001,ORG-SYN-001,2026-02-11T09:12:00Z,203.0.113.11,SyntheticBrowser/1.0,allowed,none
+EVT-SYN-0002,USR-SYN-002,Jordan Fictitious,jordan.fictitious@example.invalid,scan,DOC-SYN-0001,ORG-SYN-001,2026-02-11T09:14:00Z,203.0.113.12,SyntheticBrowser/1.0,allowed,none
+EVT-SYN-0003,USR-SYN-003,Taylor Example,taylor.example@example.invalid,review,DOC-SYN-0001,ORG-SYN-001,2026-02-12T11:04:00Z,198.51.100.21,SyntheticBrowser/1.0,allowed,none
+EVT-SYN-0004,USR-SYN-004,Casey Testcase,casey.testcase@example.invalid,download,DOC-SYN-0002,ORG-SYN-002,2026-03-02T15:31:00Z,192.0.2.31,SyntheticBrowser/1.0,allowed,none
+EVT-SYN-0005,USR-SYN-999,Unknown Example Actor,unknown.actor@example.invalid,login_attempt,,ORG-SYN-002,2026-03-02T15:35:00Z,198.51.100.99,SyntheticBrowser/1.0,denied,repeated_failure
+EVT-SYN-0006,USR-SYN-005,Morgan Imaginary,morgan.imaginary@example.invalid,upload,DOC-SYN-0003,ORG-SYN-002,2026-03-03T08:20:00Z,203.0.113.44,SyntheticBrowser/1.0,allowed,none
+EVT-SYN-0007,USR-SYN-006,Riley Sample,riley.sample@example.invalid,scan,DOC-SYN-0003,ORG-SYN-003,2026-03-19T10:02:00Z,192.0.2.52,SyntheticBrowser/1.0,allowed,none
+EVT-SYN-0008,USR-SYN-003,Taylor Example,taylor.example@example.invalid,export,DOC-SYN-0004,ORG-SYN-001,2026-04-06T13:47:00Z,203.0.113.12,SyntheticBrowser/1.0,allowed,manual_review
+EVT-SYN-0009,USR-SYN-007,Echo Demonstration,echo.demonstration@example.invalid,view,DOC-SYN-0004,ORG-SYN-001,2026-04-06T13:51:00Z,198.51.100.61,SyntheticBrowser/1.0,allowed,none
+EVT-SYN-0010,USR-SYN-008,Sample Auditor,sample.auditor@example.invalid,audit,DOC-SYN-0004,ORG-SYN-001,2026-04-07T07:15:00Z,192.0.2.77,SyntheticBrowser/1.0,allowed,none

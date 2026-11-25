@@ -1,0 +1,11 @@
+line-length = 120
+target-version = "py312"
+extend-exclude = ["*/migrations/*", ".venv", "venv", "staticfiles", "samples/*.pdf", "samples/*.docx"]
+
+[lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["B008"]
+
+[format]
+quote-style = "double"
+indent-style = "space"

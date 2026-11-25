@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ document.title|default:document.name|default:"Document" }} · BioShield{% endblock %}
+{% block section_label %}Workspace / Documents{% endblock %}
+{% block page_title %}<h1>Document inspection</h1>{% endblock %}
+{% block content %}
+<section class="view-head">
+  <div>
+    <span class="eyebrow">Document detail</span>
+    <h2>{{ document.title|default:document.name|default:document.filename|default:"Untitled document" }}</h2>
+    <p class="muted">Synthetic content · masked excerpts with reviewer context</p>
+  </div>
+  <div class="view-head__actions">
+    <span class="badge badge--gold">{{ review_status|default:document.review_status|default:"pending review" }}</span>
+    <a class="button button--ghost button--small" href="{% url 'documents:list' %}">Back to register</a>
+  </div>
+</section>
+<div class="detail-layout">
+  <div class="detail-main">
+    <section class="card">
+      <header class="card__header">
+        <div><h3>Masked excerpt</h3><p class="muted">Identifiers are replaced before display</p></div>
+        <span class="badge badge--outline">De-identified</span>
+      </header>
+      <div class="excerpt" data-highlight-excerpt data-text='{{ document.masked_content|default:document.excerpt|default:document.content|default:"" }}' data-masks='{{ masks_json|default:"[]"|escape }}'>
+        <span class="muted">No excerpt available for this synthetic document.</span>
+      </div>
+      <div class="legend" aria-label="Highlight legend">
+        <span class="legend__title">Legend</span>
+        <span class="legend__item"><i class="swatch swatch--person" aria-hidden="true"></i> Person</span>
+        <span class="legend__item"><i class="swatch swatch--id" aria-hidden="true"></i> Identifier</span>
+        <span class="legend__item"><i class="swatch swatch--date" aria-hidden="true"></i> Date</span>
+        <span class="legend__item"><i class="swatch swatch--org" aria-hidden="true"></i> Organization</span>
+        <span class="legend__item"><i class="swatch swatch--phi" aria-hidden="true"></i> Clinical value</span>
+      </div>
+    </section>
+    <section class="card card--table">
+      <header class="card__header">
+        <div><h3>Masked findings</h3><p class="muted">Candidate entities with confidence and disposition</p></div>
+        <span class="badge badge--outline">{{ findings|length|default:"0" }} candidates</span>
+      </header>
+      <div class="table-scroll">
+        <table class="table table--compact">
+          <thead>
+            <tr>
+              <th scope="col">Entity</th>
+              <th scope="col">Masked value</th>
+              <th scope="col">Confidence</th>
+              <th scope="col">Offset</th>
+              <th scope="col">Method</th>
+              <th scope="col">Review</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for finding in findings|default:document.findings.all %}
+              <tr>
+                <td><span class="badge badge--silver">{{ finding.label|default:finding.entity_type|default:"entity" }}</span></td>
+                <td><code class="masked-value">{{ finding.masked_text|default:finding.masked_value|default:finding.text|default:"[REDACTED]" }}</code></td>
+                <td><span class="badge badge--silver" data-confidence="{{ finding.confidence|default:finding.score|default:0 }}">{{ finding.confidence|default:finding.score|default:"—" }}</span></td>
+                <td>{{ finding.start|default:finding.offset|default:"—" }}</td>
+                <td>{{ finding.method|default:finding.detector|default:"analyzer" }}</td>
+                <td><span class="badge badge--mint">{{ finding.review_status|default:finding.status|default:"pending" }}</span></td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="6">
+                <div class="empty-state empty-state--inline">
+                  <span class="empty-icon" aria-hidden="true">◇</span>
+                  <h3>No findings recorded</h3>
+                  <p>Run a scan on this synthetic document to populate candidate entities.</p>
+                </div>
+              </td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  <aside class="detail-aside">
+    <section class="card card--glass">
+      <span class="eyebrow">Methodology</span>
+      <h3>How masking works</h3>
+      <ol class="method-list">
+        <li><strong>Normalize</strong><span>Text is extracted and whitespace is stabilized.</span></li>
+        <li><strong>Detect</strong><span>Rules and model-assisted matching propose candidates.</span></li>
+        <li><strong>Mask</strong><span>Accepted entities are replaced with typed placeholders.</span></li>
+        <li><strong>Review</strong><span>A human confirms, rejects or adjusts each finding.</span></li>
+      </ol>
+    </section>
+    <section class="card card--glass">
+      <span class="eyebrow">Review status</span>
+      <h3>{{ review_status|default:document.review_status|default:"pending review" }}</h3>
+      <dl class="meta-list">
+        <div><dt>Reviewer</dt><dd>{{ reviewer|default:document.reviewer|default:"unassigned" }}</dd></div>
+        <div><dt>Decision at</dt><dd>{{ reviewed_at|default:document.reviewed_at|default:"—" }}</dd></div>
+        <div><dt>Retention</dt><dd>{{ retention_days|default:"365" }} days</dd></div>
+      </dl>
+      <p class="muted">{{ review_notes|default:document.review_notes|default:"No reviewer notes recorded for this synthetic sample." }}</p>
+    </section>
+    <section class="card card--glass">
+      <span class="eyebrow">File metadata</span>
+      <dl class="meta-list">
+        <div><dt>Type</dt><dd>{{ document.document_type|default:document.file_type|default:"—" }}</dd></div>
+        <div><dt>Uploaded</dt><dd>{{ document.created_at|default:document.uploaded_at|default:"—" }}</dd></div>
+        <div><dt>Organization</dt><dd>{{ document.organization|default:"—" }}</dd></div>
+      </dl>
+      <a class="link-arrow" href="{{ document.file_url|default:document.get_absolute_url }}">Open source reference <span aria-hidden="true">→</span></a>
+    </section>
+  </aside>
+</div>
+{% endblock %}

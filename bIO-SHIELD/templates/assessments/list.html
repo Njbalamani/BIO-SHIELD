@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Assessments · BioShield{% endblock %}
+{% block section_label %}Workspace{% endblock %}
+{% block page_title %}<h1>Assessments</h1>{% endblock %}
+{% block content %}
+<section class="view-head">
+  <div>
+    <span class="eyebrow">Workspace</span>
+    <h2>Risk assessment register</h2>
+    <p class="muted">Repeatable scoring for synthetic documents, with human review gates.</p>
+  </div>
+  <a class="button button--ghost" href="{% url 'dashboard:home' %}">View analytics</a>
+</section>
+<section class="grid grid--3">
+  {% for assessment in assessments|default:object_list %}
+    <article class="card card--assessment" data-risk="{{ assessment.risk_level|default:'low' }}">
+      <header class="card__header">
+        <span class="eyebrow">{{ assessment.assessor_type|default:"automated" }}</span>
+        <span class="badge badge--gold">{{ assessment.risk_level|default:"low" }}</span>
+      </header>
+      <h3>{{ assessment.document|default:"Synthetic assessment" }}</h3>
+      <p class="muted">Automated scoring of synthetic findings with reviewer oversight.</p>
+      <div class="score-row">
+        <span class="score-value">{{ assessment.risk_score|default:"—" }}</span>
+        <span class="muted">/ 100 risk score</span>
+      </div>
+      <div class="progress" role="img" aria-label="Risk score">
+        <span class="progress__fill" style="width: {{ assessment.risk_score|default:0 }}%"></span>
+      </div>
+      <dl class="meta-list">
+        <div><dt>Document</dt><dd>{{ assessment.document|default:"—" }}</dd></div>
+        <div><dt>Status</dt><dd>{{ assessment.status|default:"draft" }}</dd></div>
+        <div><dt>Created</dt><dd>{{ assessment.created_at|default:"—" }}</dd></div>
+      </dl>
+      <a class="link-arrow" href="{% url 'documents:list' %}">Open assessment <span aria-hidden="true">→</span></a>
+    </article>
+  {% empty %}
+    <div class="card card--empty card--empty-wide">
+      <span class="empty-icon" aria-hidden="true">◎</span>
+      <h3>No assessments yet</h3>
+      <p>Assessments appear after synthetic documents have been scanned and reviewed.</p>
+      <a class="button button--gold button--small" href="{% url 'documents:list' %}">Browse documents</a>
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}

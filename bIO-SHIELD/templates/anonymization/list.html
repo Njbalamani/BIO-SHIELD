@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Anonymization · BioShield{% endblock %}
+{% block section_label %}Workspace{% endblock %}
+{% block page_title %}<h1>Anonymization</h1>{% endblock %}
+{% block content %}
+<section class="view-head">
+  <div>
+    <span class="eyebrow">Workspace</span>
+    <h2>Masking operation log</h2>
+    <p class="muted">Trace each transformation applied to synthetic text before review.</p>
+  </div>
+  <span class="badge badge--outline">{{ jobs|length|default:"0" }} jobs</span>
+</section>
+<div class="detail-layout">
+  <section class="card card--table">
+    <div class="table-scroll">
+      <table class="table table--compact">
+        <thead>
+          <tr>
+            <th scope="col">Job</th>
+            <th scope="col">Document</th>
+            <th scope="col">Status</th>
+            <th scope="col">Output</th>
+            <th scope="col">Created</th>
+            <th scope="col">Finished</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for job in jobs|default:object_list %}
+            <tr>
+              <td><span class="badge badge--silver">{{ job|default:"job" }}</span></td>
+              <td>{{ job.document|default:"—" }}</td>
+              <td><span class="badge badge--mint">{{ job.status|default:"pending" }}</span></td>
+              <td>{{ job.output_format|default:"TXT" }}</td>
+              <td>{{ job.created_at|default:"—" }}</td>
+              <td>{{ job.finished_at|default:"—" }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="6">
+              <div class="empty-state">
+                <span class="empty-icon" aria-hidden="true">✧</span>
+                <h3>No masking operations</h3>
+                <p>Accepted findings will be listed here once a scan completes.</p>
+                <a class="button button--gold button--small" href="{% url 'documents:upload' %}">Scan a sample</a>
+              </div>
+            </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <aside class="detail-aside">
+    <section class="card card--glass">
+      <span class="eyebrow">Available strategies</span>
+      <h3>Masking methods</h3>
+      <ul class="check-list">
+        <li><strong>Redact</strong> — replace with a typed token</li>
+        <li><strong>Generalize</strong> — broaden a value to a safe class</li>
+        <li><strong>Perturb</strong> — shift synthetic numeric values</li>
+        <li><strong>Synthesize</strong> — substitute a fabricated value</li>
+      </ul>
+    </section>
+    <section class="card card--glass">
+      <span class="eyebrow">Policy</span>
+      <p class="muted">Masking decisions are reversible only inside the review workspace and are recorded for audit.</p>
+      <a class="link-arrow" href="{% url 'findings:list' %}">Review findings <span aria-hidden="true">→</span></a>
+    </section>
+  </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Access events · BioShield{% endblock %}
+{% block section_label %}Workspace{% endblock %}
+{% block page_title %}<h1>Access events</h1>{% endblock %}
+{% block content %}
+<section class="view-head">
+  <div>
+    <span class="eyebrow">Workspace</span>
+    <h2>Audit stream</h2>
+    <p class="muted">Synthetic actor activity across documents, reviews and exports.</p>
+  </div>
+  <span class="badge badge--mint">Retention {{ retention_days|default:"365" }} days</span>
+</section>
+<section class="filter-bar">
+  <label class="search-field">
+    <span aria-hidden="true">⌕</span>
+    <input type="search" data-table-filter="#access-table" placeholder="Filter actor, event or resource" aria-label="Filter access events">
+  </label>
+  <span class="badge badge--outline">{{ events|length|default:"0" }} events</span>
+</section>
+<section class="card card--table">
+  <div class="table-scroll">
+    <table class="table table--compact" id="access-table">
+      <thead>
+        <tr>
+          <th scope="col">Timestamp</th>
+          <th scope="col">Actor</th>
+          <th scope="col">Event</th>
+          <th scope="col">Resource</th>
+          <th scope="col">Source</th>
+          <th scope="col">Outcome</th>
+          <th scope="col">Signal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in events %}
+          <tr data-search-row="{{ event.actor_label|default:'' }} {{ event.action|default:'' }} {{ event.document|default:'' }}">
+            <td>{{ event.occurred_at|default:"—" }}</td>
+            <td>{{ event.actor_label|default:"synthetic-actor" }}</td>
+            <td><span class="badge badge--silver">{{ event.action|default:"view" }}</span></td>
+            <td>{{ event.document|default:"—" }}</td>
+            <td><code>{{ event.ip_address|default:"—" }}</code></td>
+            <td><span class="badge badge--mint">{{ event.action|default:"view" }}</span></td>
+            <td>{{ event.anomaly_flag|default:"none" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="7">
+            <div class="empty-state">
+              <span class="empty-icon" aria-hidden="true">⌁</span>
+              <h3>No access events recorded</h3>
+              <p>Activity from synthetic users will appear here as actions are performed.</p>
+            </div>
+          </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

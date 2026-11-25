@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dashboard · BioShield{% endblock %}
+{% block section_label %}Dashboard{% endblock %}
+{% block page_title %}<h1>Operations overview</h1>{% endblock %}
+{% block content %}
+<section class="dashboard-head">
+  <div>
+    <span class="eyebrow">Command centre</span>
+    <h2>Privacy posture at a glance</h2>
+    <p class="muted">Live view of synthetic scanning activity, reviewer load and access signals.</p>
+  </div>
+  <div class="dashboard-head__actions">
+    <span class="badge badge--mint">Synthetic environment</span>
+    <a class="button button--gold button--small" href="{% url 'documents:upload' %}">New scan</a>
+  </div>
+</section>
+<section class="metric-grid" aria-label="Key metrics">
+  <article class="card card--metric">
+    <span class="metric__label">Documents scanned</span>
+    <strong class="metric__value">{{ metrics.documents_total|default:"0" }}</strong>
+    <span class="metric__hint">Across all synthetic collections</span>
+  </article>
+  <article class="card card--metric">
+    <span class="metric__label">Candidate findings</span>
+    <strong class="metric__value">{{ metrics.findings_total|default:"0" }}</strong>
+    <span class="metric__hint">Awaiting reviewer disposition</span>
+  </article>
+  <article class="card card--metric">
+    <span class="metric__label">High risk cases</span>
+    <strong class="metric__value metric__value--gold">{{ high_risk_count|default:"0" }}</strong>
+    <span class="metric__hint">Escalated for manual review</span>
+  </article>
+  <article class="card card--metric">
+    <span class="metric__label">Access events</span>
+    <strong class="metric__value">{{ access_event_count|default:"0" }}</strong>
+    <span class="metric__hint">Recorded in the current window</span>
+  </article>
+</section>
+<section class="chart-grid">
+  <article class="card card--chart card--chart-wide">
+    <header class="card__header">
+      <div><h3>Findings by category</h3><p class="muted">Distribution of detected entity classes</p></div>
+      <span class="badge badge--outline">Aggregate</span>
+    </header>
+    <div class="chart-wrap chart-wrap--tall"><canvas id="findings-category-chart" aria-label="Findings by category chart" role="img"></canvas></div>
+  </article>
+  <article class="card card--chart">
+    <header class="card__header">
+      <div><h3>Severity mix</h3><p class="muted">Confidence-weighted findings</p></div>
+    </header>
+    <div class="chart-wrap"><canvas id="severity-chart" aria-label="Severity doughnut chart" role="img"></canvas></div>
+  </article>
+  <article class="card card--chart">
+    <header class="card__header">
+      <div><h3>Risk levels</h3><p class="muted">Assessment outcomes by band</p></div>
+    </header>
+    <div class="chart-wrap"><canvas id="risk-level-chart" aria-label="Risk level bar chart" role="img"></canvas></div>
+  </article>
+  <article class="card card--chart card--chart-wide">
+    <header class="card__header">
+      <div><h3>Access event timeline</h3><p class="muted">Most recent recorded activity</p></div>
+      <span class="badge badge--outline">Audit stream</span>
+    </header>
+    <div class="table-scroll">
+      <table class="table table--compact" id="access-events-table">
+        <thead><tr><th scope="col">Time</th><th scope="col">Actor</th><th scope="col">Event</th><th scope="col">Document</th><th scope="col">Outcome</th></tr></thead>
+        <tbody id="access-events-body">
+          <tr><td colspan="5" class="table-empty">No access events available yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>
+<section class="section section--tight">
+  <header class="section__head section__head--row">
+    <div><span class="eyebrow">Recent work</span><h2>Latest documents</h2></div>
+    <a class="link-arrow" href="{% url 'documents:list' %}">All documents <span aria-hidden="true">→</span></a>
+  </header>
+  <div class="card card--table">
+    <div class="table-scroll">
+      <table class="table">
+        <thead><tr><th scope="col">Title</th><th scope="col">Type</th><th scope="col">Status</th><th scope="col">Uploaded</th><th scope="col">Findings</th></tr></thead>
+        <tbody>
+          {% for document in recent_documents %}
+            <tr>
+              <td><a class="table__link" href="{{ document.get_absolute_url }}">{{ document.title|default:document.name|default:document.filename|default:"Untitled document" }}</a></td>
+              <td>{{ document.document_type|default:document.file_type|default:"—" }}</td>
+              <td><span class="badge badge--silver">{{ document.status|default:"received" }}</span></td>
+              <td>{{ document.created_at|default:document.uploaded_at|default:"—" }}</td>
+              <td>{{ document.finding_count|default:"0" }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="5" class="table-empty">No documents yet. <a href="{% url 'documents:upload' %}">Upload a synthetic sample</a> to begin.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<script id="dashboard-data" type="application/json">{{ metrics_json|safe }}</script>
+{% endblock %}

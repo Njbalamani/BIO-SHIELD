@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Organizations · BioShield{% endblock %}
+{% block section_label %}Administration{% endblock %}
+{% block page_title %}<h1>Organizations</h1>{% endblock %}
+{% block content %}
+<section class="view-head">
+  <div>
+    <span class="eyebrow">Administration</span>
+    <h2>Workspace boundaries</h2>
+    <p class="muted">Each organization scopes synthetic documents, reviewer roles and retention settings.</p>
+  </div>
+  <span class="badge badge--gold badge--outline">{{ organizations|length|default:"0" }} registered</span>
+</section>
+<section class="grid grid--3">
+  {% for organization in organizations|default:object_list %}
+    <article class="card card--org">
+      <div class="card__header">
+        <span class="org-mark" aria-hidden="true">{{ organization.name|slice:":1"|upper|default:"B" }}</span>
+        <span class="badge badge--silver">{{ organization.slug|default:"synthetic" }}</span>
+      </div>
+      <h3><a class="table__link" href="{{ organization.get_absolute_url }}">{{ organization.name|default:"Unnamed organization" }}</a></h3>
+      <p class="muted">{{ organization.description|default:"Synthetic workspace for privacy workflow demonstrations." }}</p>
+      <dl class="meta-list">
+        <div><dt>Members</dt><dd>{{ organization.member_count|default:"0" }}</dd></div>
+        <div><dt>Documents</dt><dd>{{ organization.document_count|default:"0" }}</dd></div>
+        <div><dt>Created</dt><dd>{{ organization.created_at|default:"—" }}</dd></div>
+      </dl>
+      <a class="link-arrow" href="{{ organization.get_absolute_url }}">Open workspace <span aria-hidden="true">→</span></a>
+    </article>
+  {% empty %}
+    <div class="card card--empty card--empty-wide">
+      <span class="empty-icon" aria-hidden="true">⬡</span>
+      <h3>No organizations yet</h3>
+      <p>Create a synthetic workspace to group documents and reviewers.</p>
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}

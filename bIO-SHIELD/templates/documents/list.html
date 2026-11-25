@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Documents · BioShield{% endblock %}
+{% block section_label %}Workspace{% endblock %}
+{% block page_title %}<h1>Documents</h1>{% endblock %}
+{% block content %}
+<section class="view-head">
+  <div>
+    <span class="eyebrow">Workspace</span>
+    <h2>Document register</h2>
+    <p class="muted">Synthetic files only. Scan status, finding counts and reviewer gates stay visible here.</p>
+  </div>
+  <a class="button button--gold" href="{% url 'documents:upload' %}">Upload document</a>
+</section>
+<section class="filter-bar">
+  <label class="search-field">
+    <span aria-hidden="true">⌕</span>
+    <input type="search" data-table-filter="#documents-table" placeholder="Filter by title, type or status" aria-label="Filter documents">
+  </label>
+  <span class="badge badge--outline">{{ documents|length|default:"0" }} in view</span>
+</section>
+<section class="card card--table">
+  <div class="table-scroll">
+    <table class="table" id="documents-table">
+      <thead>
+        <tr>
+          <th scope="col">Document</th>
+          <th scope="col">Type</th>
+          <th scope="col">Organization</th>
+          <th scope="col">Status</th>
+          <th scope="col">Findings</th>
+          <th scope="col">Uploaded</th>
+          <th scope="col" class="u-right">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for document in documents|default:object_list %}
+          <tr data-search-row="{{ document.title|default:document.name|default:document.filename|default:'' }} {{ document.document_type|default:'' }} {{ document.status|default:'' }}">
+            <td>
+              <span class="table__primary">{{ document.title|default:document.name|default:document.filename|default:"Untitled document" }}</span>
+              <span class="table__secondary">{{ document.summary|default:document.description|default:"Synthetic sample" }}</span>
+            </td>
+            <td><span class="badge badge--silver">{{ document.document_type|default:document.file_type|default:"—" }}</span></td>
+            <td>{{ document.organization|default:"—" }}</td>
+            <td><span class="badge badge--mint">{{ document.status|default:"received" }}</span></td>
+            <td>{{ document.finding_count|default:"0" }}</td>
+            <td>{{ document.created_at|default:document.uploaded_at|default:"—" }}</td>
+            <td class="u-right"><a class="button button--ghost button--tiny" href="{{ document.get_absolute_url }}">Inspect</a></td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="7">
+            <div class="empty-state">
+              <span class="empty-icon" aria-hidden="true">▣</span>
+              <h3>No documents in the register</h3>
+              <p>Upload a synthetic sample to see masking, confidence scores and review history.</p>
+              <a class="button button--gold button--small" href="{% url 'documents:upload' %}">Upload a sample</a>
+            </div>
+          </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}BioShield · De-identification intelligence{% endblock %}
+{% block body_class %}page-index{% endblock %}
+{% block section_label %}Introduction{% endblock %}
+{% block page_title %}<h1>Security for every clinical document</h1>{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero__copy">
+    <span class="badge badge--gold badge--outline">Synthetic research environment</span>
+    <h2 class="hero__headline">Protect identity.<br><span class="text-gradient">Preserve insight.</span></h2>
+    <p class="hero__lede">BioShield combines document scanning, entity masking, risk scoring and evidence-ready reporting in one calm, auditable workspace built for healthcare privacy teams.</p>
+    <div class="hero__actions">
+      <a class="button button--gold" href="{% url 'dashboard:home' %}">Open dashboard <span aria-hidden="true">→</span></a>
+      <a class="button button--glass" href="{% url 'documents:upload' %}">Scan a document</a>
+    </div>
+    <dl class="hero__stats">
+      <div><dt>Masking modes</dt><dd>04</dd></div>
+      <div><dt>Review gates</dt><dd>03</dd></div>
+      <div><dt>Real patient data</dt><dd>00</dd></div>
+    </dl>
+  </div>
+  <div class="hero__visual">
+    <div class="scene-frame">
+      <canvas id="shield-scene" aria-label="Animated three-dimensional shield" role="img"></canvas>
+      <div class="scene-frame__caption"><span class="dot dot--gold" aria-hidden="true"></span> Shield engine · idle</div>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <header class="section__head">
+    <span class="eyebrow">Capability map</span>
+    <h2>One deliberate workflow, end to end</h2>
+    <p>Every stage keeps a human reviewer in control and records why a decision was made.</p>
+  </header>
+  <div class="grid grid--3">
+    <article class="card card--feature">
+      <span class="feature-icon" aria-hidden="true">▣</span>
+      <h3>Ingest &amp; classify</h3>
+      <p>Upload synthetic notes, summaries and access logs. Files are typed, versioned and queued for scanning.</p>
+      <a class="link-arrow" href="{% url 'documents:list' %}">Browse documents <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="card card--feature">
+      <span class="feature-icon" aria-hidden="true">◇</span>
+      <h3>Detect &amp; mask</h3>
+      <p>Analyzer rules and language models surface candidate identifiers with confidence scores and offsets.</p>
+      <a class="link-arrow" href="{% url 'findings:list' %}">Review findings <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="card card--feature">
+      <span class="feature-icon" aria-hidden="true">✓</span>
+      <h3>Assess &amp; report</h3>
+      <p>Risk levels, reviewer sign-off and mapped control evidence produce repeatable sample reports.</p>
+      <a class="link-arrow" href="{% url 'reports:list' %}">View reports <span aria-hidden="true">→</span></a>
+    </article>
+  </div>
+</section>
+<section class="section">
+  <header class="section__head">
+    <span class="eyebrow">Operating model</span>
+    <h2>Designed for evidence, not theatre</h2>
+  </header>
+  <div class="grid grid--4">
+    <article class="card card--step"><span class="step-number">01</span><h3>Scope</h3><p>Define the organization, policy set and retention window.</p></article>
+    <article class="card card--step"><span class="step-number">02</span><h3>Scan</h3><p>Run deterministic and model-assisted detection on synthetic content.</p></article>
+    <article class="card card--step"><span class="step-number">03</span><h3>Review</h3><p>Accept, reject or reclassify each candidate finding.</p></article>
+    <article class="card card--step"><span class="step-number">04</span><h3>Evidence</h3><p>Export a traceable sample report with methodology and limitations.</p></article>
+  </div>
+</section>
+<section class="section section--cta">
+  <div class="card card--cta">
+    <div>
+      <span class="eyebrow">Start safely</span>
+      <h2>Explore with synthetic data only</h2>
+      <p>Nothing here represents a real person. Use the bundled fixtures to learn the workflow before connecting any environment.</p>
+    </div>
+    <div class="hero__actions">
+      <a class="button button--gold" href="{% url 'accounts:register' %}">Create workspace</a>
+      <a class="button button--ghost" href="{% url 'compliance:list' %}">Read the disclaimer</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

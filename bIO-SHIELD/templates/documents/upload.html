@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Upload document · BioShield{% endblock %}
+{% block section_label %}Workspace / Documents{% endblock %}
+{% block page_title %}<h1>Upload synthetic document</h1>{% endblock %}
+{% block content %}
+<div class="upload-layout">
+  <section class="card card--auth">
+    <span class="eyebrow">New scan</span>
+    <h2>Add a document to the register</h2>
+    <p class="muted">PDF, DOCX and TXT samples up to 10 MB. Only synthetic content is permitted.</p>
+    <form method="post" action="{% url 'documents:upload' %}" enctype="multipart/form-data" class="form form--stack" data-enhance>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <div class="form__field">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.help_text %}<small class="form__help">{{ field.help_text }}</small>{% endif %}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+      <label class="dropzone" data-dropzone>
+        <span class="dropzone__icon" aria-hidden="true">↥</span>
+        <strong>Drop a synthetic file here</strong>
+        <span class="muted">or choose a file from your device</span>
+        <input type="file" name="file" accept=".pdf,.docx,.txt,.csv" data-file-input>
+        <span class="dropzone__filename" data-file-name>No file selected</span>
+      </label>
+      <fieldset class="form__fieldset">
+        <legend>Scan options</legend>
+        <label class="check-row"><input type="checkbox" name="use_presidio" checked> <span>Rule-based analyzer</span></label>
+        <label class="check-row"><input type="checkbox" name="use_spacy" checked> <span>Language model assistance</span></label>
+        <label class="check-row"><input type="checkbox" name="require_review" checked> <span>Require human review before export</span></label>
+      </fieldset>
+      <div class="form__actions">
+        <button class="button button--gold" type="submit" data-submit-label="Queueing scan…">Queue scan</button>
+        <a class="button button--ghost" href="{% url 'documents:list' %}">Cancel</a>
+      </div>
+    </form>
+  </section>
+  <aside class="auth-aside">
+    <div class="card card--glass">
+      <span class="feature-icon" aria-hidden="true">◇</span>
+      <h3>Before you upload</h3>
+      <ul class="check-list">
+        <li>Use fabricated names and identifiers</li>
+        <li>Use <code>.invalid</code> email domains</li>
+        <li>Remove real clinical narratives</li>
+        <li>Keep files under the size limit</li>
+      </ul>
+    </div>
+    <div class="card card--glass">
+      <span class="eyebrow">Bundled samples</span>
+      <p class="muted">The <code>samples/</code> directory contains clearly labelled synthetic files for safe demonstration.</p>
+      <a class="link-arrow" href="{% url 'documents:list' %}">View register <span aria-hidden="true">→</span></a>
+    </div>
+  </aside>
+</div>
+{% endblock %}

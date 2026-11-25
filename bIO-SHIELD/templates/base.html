@@ -1,0 +1,153 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <meta name="description" content="BioShield is a synthetic-data workspace for document de-identification, risk assessment and compliance evidence.">
+  <meta name="theme-color" content="#070b16">
+  <title>{% block title %}BioShield · Privacy Intelligence{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/shield-mark.svg' %}">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  {% block extra_css %}{% endblock %}
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script defer src="{% static 'js/main.js' %}"></script>
+  <script defer src="{% static 'js/highlight.js' %}"></script>
+  <script defer src="{% static 'js/dashboard.js' %}"></script>
+  <script defer src="{% static 'js/shield.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</head>
+<body class="app-shell {% block body_class %}{% endblock %}">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="ambient" aria-hidden="true">
+  <span class="ambient__orb ambient__orb--one"></span>
+  <span class="ambient__orb ambient__orb--two"></span>
+  <span class="ambient__grid"></span>
+</div>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
+    <a class="brand" href="{% url 'home' %}">
+      <img class="brand__mark" src="{% static 'images/shield-mark.svg' %}" alt="" width="42" height="42">
+      <span class="brand__text">
+        <strong>BioShield</strong>
+        <small>Privacy Intelligence</small>
+      </span>
+    </a>
+    <div class="sidebar__scroll">
+      <nav class="sidebar__nav" aria-label="Sections">
+        <p class="nav-label">Overview</p>
+        <a class="nav-link" href="{% url 'home' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">◈</span>
+          <span>Introduction</span>
+        </a>
+        <a class="nav-link" href="{% url 'dashboard:home' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">▤</span>
+          <span>Dashboard</span>
+        </a>
+        <p class="nav-label">Workspace</p>
+        <a class="nav-link" href="{% url 'documents:list' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">▣</span>
+          <span>Documents</span>
+        </a>
+        <a class="nav-link" href="{% url 'documents:upload' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">↥</span>
+          <span>Upload</span>
+        </a>
+        <a class="nav-link" href="{% url 'findings:list' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">◇</span>
+          <span>Findings</span>
+        </a>
+        <a class="nav-link" href="{% url 'assessments:list' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">◎</span>
+          <span>Assessments</span>
+        </a>
+        <a class="nav-link" href="{% url 'anonymization:list' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">✧</span>
+          <span>Anonymization</span>
+        </a>
+        <a class="nav-link" href="{% url 'access:list' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">⌁</span>
+          <span>Access events</span>
+        </a>
+        <a class="nav-link" href="{% url 'compliance:list' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">✓</span>
+          <span>Compliance</span>
+        </a>
+        <a class="nav-link" href="{% url 'reports:list' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">▧</span>
+          <span>Reports</span>
+        </a>
+        <p class="nav-label">Administration</p>
+        <a class="nav-link" href="{% url 'organizations:list' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">⬡</span>
+          <span>Organizations</span>
+        </a>
+      </nav>
+      <nav class="sidebar__nav sidebar__nav--account" aria-label="Account">
+        <a class="nav-link" href="{% url 'accounts:login' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">→</span>
+          <span>Sign in</span>
+        </a>
+        <a class="nav-link" href="{% url 'accounts:register' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">✚</span>
+          <span>Create account</span>
+        </a>
+        <a class="nav-link" href="{% url 'accounts:logout' %}" data-nav>
+          <span class="nav-link__icon" aria-hidden="true">↩</span>
+          <span>Sign out</span>
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar__footer">
+      <span class="dot dot--gold" aria-hidden="true"></span>
+      <span>Synthetic data only<br><small>No real patient records</small></span>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" data-close-sidebar hidden></div>
+  <div class="app-main">
+    <header class="topbar">
+      <button class="icon-button" type="button" data-sidebar-toggle aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </button>
+      <div class="topbar__title">
+        <span class="eyebrow">BioShield / {% block section_label %}Overview{% endblock %}</span>
+        {% block page_title %}<h1>Privacy intelligence workspace</h1>{% endblock %}
+      </div>
+      <div class="topbar__actions">
+        <span class="status-pill"><span class="dot dot--mint" aria-hidden="true"></span> Systems nominal</span>
+        {% if request.user.is_authenticated %}
+          <span class="avatar" title="{{ request.user.username }}">{{ request.user.username|slice:":1"|upper }}</span>
+          <a class="button button--ghost button--small" href="{% url 'accounts:logout' %}">Sign out</a>
+        {% else %}
+          <a class="button button--ghost button--small" href="{% url 'accounts:login' %}">Sign in</a>
+          <a class="button button--gold button--small" href="{% url 'accounts:register' %}">Get started</a>
+        {% endif %}
+      </div>
+    </header>
+    <main id="main-content" class="content">
+      {% if messages %}
+        <div class="messages" role="status" aria-live="polite">
+          {% for message in messages %}
+            <div class="message message--{{ message.tags|default:'info' }}" data-toast data-toast-type="{{ message.tags|default:'info' }}">
+              <span class="message__mark" aria-hidden="true">✦</span>
+              <span>{{ message }}</span>
+              <button class="message__close" type="button" data-dismiss-message aria-label="Dismiss message">×</button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="footer">
+      <span>© 2026 BioShield · Synthetic demonstration environment</span>
+      <span>Automated checklists are decision support, not legal certification.</span>
+    </footer>
+  </div>
+</div>
+<div class="toast-stack" id="toast-stack" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
